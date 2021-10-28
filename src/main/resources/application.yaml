@@ -1,0 +1,61 @@
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/test
+    username: postgres
+    password: postgres
+  liquibase:
+    change-log: classpath:liquibase/master.xml
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQL95Dialect
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            clientId: ${CLIENT_ID}
+            clientSecret: ${CLIENT_SECRET}
+            scope:
+              - email
+
+cors:
+  ui-url: http://localhost:4200
+
+storage:
+  folder: ./temp
+  name-prefix: demo_
+
+
+---
+
+spring:
+  profiles:
+    active: ehcache
+  cache:
+    jcache:
+      config: classpath:ehcache.xml
+
+---
+
+spring:
+  profiles:
+    active: docker-dev
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://db:5432/postgres
+    username: postgres
+    password: postgres
+
+---
+
+spring:
+  profiles:
+    active: cloud
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: ${POSTGRES_URL}
+    username: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
+
+server:
+  port: ${PORT:8080}
